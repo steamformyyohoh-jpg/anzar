@@ -124,13 +124,24 @@ Everything stores in your browser's `localStorage`.
 
 ```
 anzar/
-├── index.html          # Single page shell
+├── Readme.md
+├── license
+├── manifest.json
+├── sw.js
+├── index.html
 ├── css/
-│   └── style.css       # Brutalist Swiss design system
-├── js/
-│   └── app.js          # All logic: calendar, notes, graph, storage
-└── README.md           # This file
-```
+│   └── style.css
+└── js/
+    ├── app.js
+    ├── modules/
+    │   ├── calendar.js
+    │   ├── notes.js
+    │   ├── graph.js
+    │   └── today.js
+    └── utils/
+        └── helpers.js
+
+
 
 ---
 
