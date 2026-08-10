@@ -1,5 +1,7 @@
 // js/app.js (COMPLETE MONOLITHIC VERSION — to be modularized in Step 1.5)
+
 import { CalendarModule } from './modules/calendar.js';
+import { WeekCalendarModule } from './modules/weekCalendar.js';
 import { NotesModule } from './modules/notes.js';
 import { GraphModule } from './modules/graph.js';
 import { TodayModule } from './modules/today.js';
@@ -12,10 +14,11 @@ const App = {
     tasks: [],
     notes: [],
     folders: [],
-    settings: { theme: 'dark' },
+    settings: { theme: 'dark', calendarView: 'month' },
     recentNotes: []
   },
   currentView: 'calendar',
+  calendarView: 'month', // 'month' or 'week'
   modalCallback: null,
 
   init() {
@@ -146,7 +149,7 @@ const App = {
     }
   },
 
-  render() {
+render() {
     const main = document.getElementById('main');
     if (!main) {
       console.error('No #main element found');
@@ -154,9 +157,19 @@ const App = {
     }
     main.innerHTML = '';
 
+    // Show/hide calendar view toggle
+    const toggle = document.getElementById('calendarViewToggle');
+    if (toggle) {
+      toggle.style.display = this.currentView === 'calendar' ? 'flex' : 'none';
+    }
+
     switch (this.currentView) {
       case 'calendar':
-        CalendarModule.render(main, this.data, () => this.save());
+        if (this.calendarView === 'week') {
+          WeekCalendarModule.render(main, this.data, () => this.save());
+        } else {
+          CalendarModule.render(main, this.data, () => this.save());
+        }
         break;
       case 'notes':
         NotesModule.render(main, this.data, () => this.save(), (id) => this.openNote(id));
@@ -190,6 +203,21 @@ const App = {
         this.render();
       });
     });
+
+    // Calendar view toggle (month / week)
+    const calToggle = document.getElementById('calendarViewToggle');
+    if (calToggle) {
+      calToggle.querySelectorAll('[data-cal-view]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          calToggle.querySelectorAll('[data-cal-view]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.calendarView = btn.dataset.calView;
+          this.data.settings.calendarView = this.calendarView;
+          this.save();
+          this.render();
+        });
+      });
+    }
   },
 
   setupTheme() {

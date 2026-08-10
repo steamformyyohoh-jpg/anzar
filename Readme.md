@@ -41,16 +41,27 @@ A productivity tool that combines a monthly calendar with Obsidian-style linked 
 
 ## Quick Start
 
-Open `index.html` in any browser. No build step. No server.
+## Running Locally
 
-Or deploy:
+ANZAR uses **ES modules**, which require an HTTP server. The `file://` protocol will not work due to CORS restrictions.
 
+**Option 1: Python (3.x)**
 ```bash
-git init
-git add .
-git commit -m "Anzar"
-git remote add origin https://github.com/ASAPUI/anzar.git
-git push -u origin main
+cd anzar
+python -m http.server 8080
+# Open http://localhost:8080
+```
+
+**Option 2: Node.js**
+```bash
+npm install -g http-server
+cd anzar
+http-server
+# Open http://localhost:8080
+```
+
+**Option 3: GitHub Pages**
+Push to `main` branch and enable Pages in repo settings.
 ```
 
 Enable GitHub Pages in repo settings. Live at `https://ASAPUI.github.io/anzar/`
@@ -58,28 +69,7 @@ Enable GitHub Pages in repo settings. Live at `https://ASAPUI.github.io/anzar/`
 ---
 
 ## How to Use
-(Local Development)
 
-```bash
-# Python
-cd anzar
-python -m http.server 8080
-
-# Then open: http://localhost:8080
-```
-
-Or:
-
-```bash
-# Node.js
-npm install -g serve
-cd anzar
-npx serve -s . -l 8080
-
-# Then open: http://localhost:8080
-```
-
-**Do NOT use `file://` protocol** — ES modules require HTTP.
 ### Calendar
 1. Fill the sidebar form: title, date, priority
 2. Click **Add to Calendar**
@@ -124,14 +114,23 @@ Everything stores in your browser's `localStorage`.
 
 ```
 anzar/
-├── index.html          # Single page shell
+├── Readme.md
+├── license
+├── manifest.json
+├── sw.js
+├── index.html
 ├── css/
-│   └── style.css       # Brutalist Swiss design system
-├── js/
-│   └── app.js          # All logic: calendar, notes, graph, storage
-└── README.md           # This file
+│   └── style.css
+└── js/
+    ├── app.js
+    ├── modules/
+    │   ├── calendar.js
+    │   ├── notes.js
+    │   ├── graph.js
+    │   └── today.js
+    └── utils/
+        └── helpers.js
 ```
-
 ---
 
 ## Roadmap
@@ -149,9 +148,7 @@ anzar/
 
 
 ---
-## Summary
-ANZAR is a local-first personal productivity web app (Calendar + Notes + Graph + Today) built in vanilla JS with no build tooling.
----
+
 ## License
 
 MIT. Build whatever you want.
